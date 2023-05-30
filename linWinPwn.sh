@@ -839,8 +839,9 @@ userpass_kerbrute_check () {
             echo -e "${YELLOW}[i] Finding users with Password = username using kerbrute. This may take a while...${NC}"
             /bin/rm "${user_pass_wordlist}" 2>/dev/null
             for i in $(/bin/cat ${known_users_list}); do
-                echo -e "${i}:${i}" >> "${user_pass_wordlist}"
+                echo -e "${i}:${i}" >> "${user_pass_wordlist}"                
             done
+            sort -ufo "${user_pass_wordlist}" "${user_pass_wordlist}"
             "${kerbrute}" bruteforce "${user_pass_wordlist}" -d ${dc_domain} --dc ${dc_ip} -t 5 ${argument_kerbrute} > ${output_dir}/Kerberos/kerbrute_pass_output_${dc_domain}.txt 2>&1
             /bin/cat ${output_dir}/Kerberos/kerbrute_pass_output_${dc_domain}.txt 2>&1 | grep "VALID" | cut -d " " -f 8 | cut -d "@" -f 1 > "${output_dir}/DomainRecon/user_eq_pass_valid_kerb_${dc_domain}.txt"
             if [ -s "${output_dir}/DomainRecon/user_eq_pass_valid_kerb_${dc_domain}.txt" ] ; then
